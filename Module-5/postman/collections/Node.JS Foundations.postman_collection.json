@@ -1,0 +1,499 @@
+{
+  "info": {
+    "_postman_id": "61898567-f783-40ab-af5a-d815bcc43309",
+    "name": "Node.JS Foundations",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Module-5",
+      "item": [
+        {
+          "name": "Walkthrough",
+          "item": [
+            {
+              "name": "Non-Exist",
+              "id": "cfe28526-1a33-44aa-9f58-90a096715e72",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:3000/nonexistent",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "3000",
+                  "path": [
+                    "nonexistent"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Health",
+              "id": "0bd3b8d3-5abc-48e9-b256-9fe5828f360d",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:3000/health",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "3000",
+                  "path": [
+                    "health"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Index",
+              "id": "16f76ad5-f37b-4a52-9642-9b2bbb2e7e73",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:3000/",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "3000",
+                  "path": [
+                    ""
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Users",
+              "id": "8614b6d1-eb0c-4c27-8577-901d193fe535",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:3000/users",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "3000",
+                  "path": [
+                    "users"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ],
+          "id": "6fe5dc36-acb9-4df9-8846-6cda3fa7964d"
+        },
+        {
+          "name": "Exercise5.1",
+          "item": [
+            {
+              "name": "Post/id",
+              "id": "23722a5c-ac64-4b8a-9c5d-0a0e03e67005",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "https://jsonplaceholder.typicode.com/posts/1",
+                  "protocol": "https",
+                  "host": [
+                    "jsonplaceholder",
+                    "typicode",
+                    "com"
+                  ],
+                  "path": [
+                    "posts",
+                    "1"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "All Posts",
+              "id": "a95ddd12-db77-49f0-9f89-3dedf2f4dae1",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "https://jsonplaceholder.typicode.com/posts",
+                  "protocol": "https",
+                  "host": [
+                    "jsonplaceholder",
+                    "typicode",
+                    "com"
+                  ],
+                  "path": [
+                    "posts"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "User/id",
+              "id": "c088f81d-9970-43b7-b91d-b01894ba7d95",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "https://jsonplaceholder.typicode.com/users/1",
+                  "protocol": "https",
+                  "host": [
+                    "jsonplaceholder",
+                    "typicode",
+                    "com"
+                  ],
+                  "path": [
+                    "users",
+                    "1"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Create new Post",
+              "id": "0242f68f-c343-4f0f-95b0-21ebae1228fe",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text",
+                    "uuid": "ee8c4b1e-afdd-428a-9291-c9ba48da56e3"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"title\": \"hello\",\n  \"body\": \"world\",\n  \"userId\": 1\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "https://jsonplaceholder.typicode.com/posts",
+                  "protocol": "https",
+                  "host": [
+                    "jsonplaceholder",
+                    "typicode",
+                    "com"
+                  ],
+                  "path": [
+                    "posts"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Delete a Post",
+              "id": "d25487bd-cb62-4689-b28c-0872416c194a",
+              "request": {
+                "method": "DELETE",
+                "header": [],
+                "url": {
+                  "raw": "https://jsonplaceholder.typicode.com/posts/1",
+                  "protocol": "https",
+                  "host": [
+                    "jsonplaceholder",
+                    "typicode",
+                    "com"
+                  ],
+                  "path": [
+                    "posts",
+                    "1"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ],
+          "id": "23e0378a-e012-49d2-9ab8-556c6063b068"
+        },
+        {
+          "name": "Exercise5.2",
+          "item": [
+            {
+              "name": "About",
+              "id": "b0d87fc1-244e-4205-80a4-2063712c2ec7",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:3000/about",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "3000",
+                  "path": [
+                    "about"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Users",
+              "id": "6f0ce43d-65af-4ad5-87b3-dd15e71e6f67",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:3000/users",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "3000",
+                  "path": [
+                    "users"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Index",
+              "id": "fdfb7fcc-10b4-4dce-b323-0759e73f4824",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:3000/",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "3000",
+                  "path": [
+                    ""
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Health",
+              "id": "5689e7ea-0866-4b3e-9e48-115a0ce95c11",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:3000/health",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "3000",
+                  "path": [
+                    "health"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Non-Exist",
+              "id": "d6fd93c9-7064-49cf-a9ab-bda3f3725f42",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:3000/nonexistent",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "3000",
+                  "path": [
+                    "nonexistent"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Time",
+              "id": "17a8e551-dc7d-4d22-89e8-3782e9a09072",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:3000/time",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "3000",
+                  "path": [
+                    "time"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Echo",
+              "id": "729c2647-012b-43dd-93ec-7e1c7e73659c",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:3000/echo?message=hello",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "3000",
+                  "path": [
+                    "echo"
+                  ],
+                  "query": [
+                    {
+                      "key": "message",
+                      "value": "hello",
+                      "uuid": "79cfb6d2-183b-4f01-bff0-23c2693ab294"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            }
+          ],
+          "id": "061caa7c-f3b4-46a7-9a39-545156616fd8"
+        },
+        {
+          "name": "Exercise5.3",
+          "item": [
+            {
+              "name": "Non-Exist",
+              "id": "9053e6c7-2a1f-4672-b341-835863db0cd7",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:3000/nonexistent",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "3000",
+                  "path": [
+                    "nonexistent"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Health",
+              "id": "7efb8dc1-952a-41e6-b671-6076b9f1ed0e",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:3000/health",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "3000",
+                  "path": [
+                    "health"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Index",
+              "id": "e7ececc4-f666-4f4a-8e55-eecb095c05c5",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:3000/",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "3000",
+                  "path": [
+                    ""
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Users",
+              "id": "1750252d-64a8-4e91-ae6c-5e5be2a3f9d7",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:3000/users",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "3000",
+                  "path": [
+                    "users"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Create New User",
+              "id": "3d9b54e6-3854-4cfb-ae6b-4b755d125588",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Biene Bryle Sanico\",\n  \"age\": 21\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:3000/users",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "3000",
+                  "path": [
+                    "users"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ],
+          "id": "3c4a9ddb-ec10-419e-9577-f711b2f8d678"
+        }
+      ],
+      "id": "212cabbe-d0ad-43cb-b2fd-0e70a07d8e22"
+    }
+  ]
+}
