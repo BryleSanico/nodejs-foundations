@@ -1,0 +1,728 @@
+{
+  "info": {
+    "_postman_id": "95f1d3d5-071d-4ee6-ade0-3cceba6fd9de",
+    "name": "Module-8",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "51718720",
+    "_collection_link": "https://go.postman.co/collection/51718720-95f1d3d5-071d-4ee6-ade0-3cceba6fd9de?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "app.js",
+      "item": [
+        {
+          "name": "/tasks (done param)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('Response is JSON array', function () {",
+                  "    pm.response.to.be.json;",
+                  "    pm.expect(pm.response.json()).to.be.an('array');",
+                  "});",
+                  "",
+                  "pm.test('Every task matches the done=true and tag=work filters', function () {",
+                  "    const tasks = pm.response.json();",
+                  "    tasks.forEach(function (t) {",
+                  "        pm.expect(t.done).to.eql(true);",
+                  "        pm.expect(t.tag).to.eql('work');",
+                  "    });",
+                  "});",
+                  "",
+                  "pm.test('Sorted by createdAt desc', function () {",
+                  "    const tasks = pm.response.json();",
+                  "    for (let i = 1; i < tasks.length; i++) {",
+                  "        pm.expect(new Date(tasks[i - 1].createdAt).getTime())",
+                  "            .to.be.at.least(new Date(tasks[i].createdAt).getTime());",
+                  "    }",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "x-api-key",
+                "value": "secret123",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "{{baseUrl}}/tasks?done=true&tag=work",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "tasks"
+              ],
+              "query": [
+                {
+                  "key": "done",
+                  "value": "true"
+                },
+                {
+                  "key": "tag",
+                  "value": "work",
+                  "type": "text"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "/tasks (list of all tasks)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('Response is a JSON array', function () {",
+                  "    pm.response.to.be.json;",
+                  "    pm.expect(pm.response.json()).to.be.an('array');",
+                  "});",
+                  "",
+                  "pm.test('Each task has the expected shape', function () {",
+                  "    const tasks = pm.response.json();",
+                  "    tasks.forEach(function (t) {",
+                  "        pm.expect(t).to.have.property('id').that.is.a('number');",
+                  "        pm.expect(t).to.have.property('title').that.is.a('string');",
+                  "        pm.expect(t).to.have.property('done').that.is.a('boolean');",
+                  "        pm.expect(t).to.have.property('createdAt');",
+                  "        pm.expect(t).to.have.property('updatedAt');",
+                  "    });",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "x-api-key",
+                "value": "secret123",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "{{baseUrl}}/tasks",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "tasks"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "/tasks/:id (one task)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 200 or 404', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200, 404]);",
+                  "});",
+                  "",
+                  "if (pm.response.code === 200) {",
+                  "    pm.test('Returns the requested task', function () {",
+                  "        const t = pm.response.json();",
+                  "        pm.expect(t).to.have.property('id', 1);",
+                  "        pm.expect(t).to.have.property('title').that.is.a('string');",
+                  "        pm.expect(t).to.have.property('done').that.is.a('boolean');",
+                  "    });",
+                  "} else {",
+                  "    pm.test('404 returns a Task not found error', function () {",
+                  "        pm.expect(pm.response.json()).to.have.property('error', 'Task not found');",
+                  "    });",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "x-api-key",
+                "value": "secret123",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "{{baseUrl}}/tasks/1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "tasks",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "/tasks (Create a task)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 201', function () {",
+                  "    pm.response.to.have.status(201);",
+                  "});",
+                  "",
+                  "pm.test('Response echoes the submitted fields', function () {",
+                  "    const body = pm.response.json();",
+                  "    pm.expect(body).to.have.property('id').that.is.a('number');",
+                  "    pm.expect(body).to.have.property('title', 'testTitle 4');",
+                  "    pm.expect(body).to.have.property('tag', 'work');",
+                  "    pm.expect(body).to.have.property('done', false);",
+                  "});",
+                  "",
+                  "pm.test('Persist the new task id for follow-up requests', function () {",
+                  "    pm.collectionVariables.set('createdTaskId', pm.response.json().id);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "x-api-key",
+                "value": "secret123",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"title\": \"testTitle 4\",\n    \"tag\": \"work\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/tasks",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "tasks"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "/tasks/:id (one task)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 200 or 404', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200, 404]);",
+                  "});",
+                  "",
+                  "if (pm.response.code === 200) {",
+                  "    pm.test('Update applied (done == true)', function () {",
+                  "        const t = pm.response.json();",
+                  "        pm.expect(t).to.have.property('id', 4);",
+                  "        pm.expect(t).to.have.property('done', true);",
+                  "    });",
+                  "} else {",
+                  "    pm.test('404 returns a Task not found error', function () {",
+                  "        pm.expect(pm.response.json()).to.have.property('error', 'Task not found');",
+                  "    });",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "PUT",
+            "header": [
+              {
+                "key": "x-api-key",
+                "value": "secret123",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"done\": true\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/tasks/4",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "tasks",
+                "4"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "/task/:id (one task)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 204 or 404', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([204, 404]);",
+                  "});",
+                  "",
+                  "if (pm.response.code === 204) {",
+                  "    pm.test('Empty body on successful delete', function () {",
+                  "        pm.expect(pm.response.text()).to.eql('');",
+                  "    });",
+                  "} else {",
+                  "    pm.test('404 returns a Task not found error', function () {",
+                  "        pm.expect(pm.response.json()).to.have.property('error', 'Task not found');",
+                  "    });",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/tasks/2",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "tasks",
+                "2"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "notes.js",
+      "item": [
+        {
+          "name": "/notes (list all notes)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('Response is a JSON array', function () {",
+                  "    pm.response.to.be.json;",
+                  "    pm.expect(pm.response.json()).to.be.an('array');",
+                  "});",
+                  "",
+                  "pm.test('Each note has the expected shape', function () {",
+                  "    const notes = pm.response.json();",
+                  "    notes.forEach(function (n) {",
+                  "        pm.expect(n).to.have.property('id').that.is.a('number');",
+                  "        pm.expect(n).to.have.property('title').that.is.a('string');",
+                  "        pm.expect(n).to.have.property('content').that.is.a('string');",
+                  "        pm.expect(n).to.have.property('createdAt');",
+                  "        pm.expect(n).to.have.property('updatedAt');",
+                  "    });",
+                  "});",
+                  "",
+                  "pm.test('Sorted by createdAt desc', function () {",
+                  "    const notes = pm.response.json();",
+                  "    for (let i = 1; i < notes.length; i++) {",
+                  "        pm.expect(new Date(notes[i - 1].createdAt).getTime())",
+                  "            .to.be.at.least(new Date(notes[i].createdAt).getTime());",
+                  "    }",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "x-api-key",
+                "value": "secret123",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "{{baseUrl}}/notes",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "notes"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "/notes (one note)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 200 or 404', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200, 404]);",
+                  "});",
+                  "",
+                  "if (pm.response.code === 200) {",
+                  "    pm.test('Returns the requested note', function () {",
+                  "        const n = pm.response.json();",
+                  "        pm.expect(n).to.have.property('id', 1);",
+                  "        pm.expect(n).to.have.property('title').that.is.a('string');",
+                  "        pm.expect(n).to.have.property('content').that.is.a('string');",
+                  "    });",
+                  "} else {",
+                  "    pm.test('404 returns a Note not found error', function () {",
+                  "        pm.expect(pm.response.json()).to.have.property('error', 'Note not found');",
+                  "    });",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "x-api-key",
+                "value": "secret123",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "{{baseUrl}}/notes/1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "notes",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "/notes (one note) Copy",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 204 or 404', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([204, 404]);",
+                  "});",
+                  "",
+                  "if (pm.response.code === 204) {",
+                  "    pm.test('Empty body on successful delete', function () {",
+                  "        pm.expect(pm.response.text()).to.eql('');",
+                  "    });",
+                  "} else {",
+                  "    pm.test('404 returns a Note not found error', function () {",
+                  "        pm.expect(pm.response.json()).to.have.property('error', 'Note not found');",
+                  "    });",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "x-api-key",
+                "value": "secret123",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "{{baseUrl}}/notes/2",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "notes",
+                "2"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "/notes (Create a note)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 201', function () {",
+                  "    pm.response.to.have.status(201);",
+                  "});",
+                  "",
+                  "pm.test('Response echoes the submitted fields', function () {",
+                  "    const body = pm.response.json();",
+                  "    pm.expect(body).to.have.property('id').that.is.a('number');",
+                  "    pm.expect(body).to.have.property('title', 'My Note 3');",
+                  "    pm.expect(body).to.have.property('content', 'Ito ang gagawin 3');",
+                  "    pm.expect(body).to.have.property('createdAt');",
+                  "    pm.expect(body).to.have.property('updatedAt');",
+                  "});",
+                  "",
+                  "pm.test('Persist the new note id for follow-up requests', function () {",
+                  "    pm.collectionVariables.set('createdNoteId', pm.response.json().id);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "x-api-key",
+                "value": "secret123",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"title\": \"My Note 3\",\n    \"content\": \"Ito ang gagawin 3\" \n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/notes",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "notes"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "/notes (Create a note) Copy",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 200 or 404', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200, 404]);",
+                  "});",
+                  "",
+                  "if (pm.response.code === 200) {",
+                  "    pm.test('Update applied to title and content', function () {",
+                  "        const n = pm.response.json();",
+                  "        pm.expect(n).to.have.property('id', 1);",
+                  "        pm.expect(n).to.have.property('title', 'My Note Updated');",
+                  "        pm.expect(n).to.have.property('content', 'Ito ang gagawin');",
+                  "    });",
+                  "} else {",
+                  "    pm.test('404 returns a Note not found error', function () {",
+                  "        pm.expect(pm.response.json()).to.have.property('error', 'Note not found');",
+                  "    });",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "PUT",
+            "header": [
+              {
+                "key": "x-api-key",
+                "value": "secret123",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"title\": \"My Note Updated\",\n    \"content\": \"Ito ang gagawin\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/notes/1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "notes",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:3000"
+    },
+    {
+      "key": "createdTaskId",
+      "value": ""
+    },
+    {
+      "key": "createdNoteId",
+      "value": ""
+    }
+  ]
+}
