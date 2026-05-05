@@ -1,0 +1,34 @@
+{
+    "name": "module-10-capstone",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+        "start": "node src/server.js",
+        "dev": "nodemon src/server.js",
+        "test": "jest",
+        "test:coverage": "jest --coverage",
+        "db:migrate": "prisma migrate dev",
+        "db:studio": "prisma studio",
+        "format": "prettier --write .",
+        "format:check": "prettier --check ."
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "type": "commonjs",
+    "devDependencies": {
+        "@types/node": "^25.6.0",
+        "dotenv": "^17.4.2",
+        "jest": "^30.3.0",
+        "nodemon": "^3.1.14",
+        "prettier": "^3.8.3",
+        "prisma": "^7.8.0",
+        "supertest": "^7.2.2"
+    },
+    "dependencies": {
+        "@prisma/adapter-better-sqlite3": "^7.8.0",
+        "@prisma/client": "^7.8.0",
+        "express": "^5.2.1"
+    }
+}
