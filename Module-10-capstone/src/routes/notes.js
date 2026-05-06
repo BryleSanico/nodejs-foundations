@@ -1,5 +1,6 @@
 const express = require('express');
-const { validateNoteData, validateParamId } = require('../middleware/validate');
+const { validate } = require('../middleware/validate');
+const { noteCreateSchema, noteUpdateSchema, paramIdSchema } = require('../schemas/note');
 const HttpError = require('../utils/HttpError');
 
 function createNotesRouter(prisma) {
@@ -71,7 +72,7 @@ function createNotesRouter(prisma) {
     });
 
     // Get one note
-    router.get('/:id', validateParamId, async (req, res, next) => {
+    router.get('/:id', validate(paramIdSchema, 'params'), async (req, res, next) => {
         try {
             const note = await prisma.note.findUnique({
                 where: { id: req.id },
@@ -84,7 +85,7 @@ function createNotesRouter(prisma) {
     });
 
     // Create a new note
-    router.post('/', validateNoteData, async (req, res, next) => {
+    router.post('/', validate(noteCreateSchema), async (req, res, next) => {
         try {
             const { title, content, tag } = req.body;
             const newNote = await prisma.note.create({
@@ -96,23 +97,30 @@ function createNotesRouter(prisma) {
         }
     });
 
-    // Update a note
-    router.put('/:id', validateParamId, validateNoteData, async (req, res, next) => {
-        try {
-            const { title, content, tag } = req.body;
-            const note = await prisma.note.update({
-                where: { id: req.id },
-                data: { title, content, tag },
-            });
-            res.json(note);
-        } catch (err) {
-            if (err.code === 'P2025') return next(new HttpError(404, 'Note not found'));
-            next(err);
-        }
-    });
+    // Update a note (partial update — only provided fields are changed)
+    router.put(
+        '/:id',
+        validate(paramIdSchema, 'params'),
+        validate(noteUpdateSchema),
+        async (req, res, next) => {
+            try {
+                if (Object.keys(req.body).length === 0) {
+                    throw new HttpError(400, 'Request body must contain at least one field');
+                }
+                const note = await prisma.note.update({
+                    where: { id: req.id },
+                    data: req.body,
+                });
+                res.json(note);
+            } catch (err) {
+                if (err.code === 'P2025') return next(new HttpError(404, 'Note not found'));
+                next(err);
+            }
+        },
+    );
 
     // Delete a note
-    router.delete('/:id', validateParamId, async (req, res, next) => {
+    router.delete('/:id', validate(paramIdSchema, 'params'), async (req, res, next) => {
         try {
             await prisma.note.delete({
                 where: { id: req.id },
