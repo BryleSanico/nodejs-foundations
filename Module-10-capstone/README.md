@@ -59,8 +59,8 @@ docs/                      ← walkthrough markdown files
 # 1. Install dependencies
 npm install
 
-# 2. Create .env (if not already present)
-echo 'DATABASE_URL="file:./dev.db"' > .env
+# 2. Create .env from the template
+cp .env.example .env
 
 # 3. Run the initial database migration
 npm run db:migrate
