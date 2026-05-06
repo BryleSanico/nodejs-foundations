@@ -1,0 +1,127 @@
+{
+  "info": {
+    "name": "Module-10-capstone",
+    "description": "Notes API capstone — Express + Prisma + SQLite + Zod.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "/health (status check)",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/health",
+          "host": ["{{baseUrl}}"],
+          "path": ["health"]
+        },
+        "description": "Returns { \"status\": \"OK\" } when the server is up."
+      },
+      "response": []
+    },
+    {
+      "name": "/notes (list all)",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/notes?page=1&limit=10&sort=createdAt:desc",
+          "host": ["{{baseUrl}}"],
+          "path": ["notes"],
+          "query": [
+            { "key": "page", "value": "1" },
+            { "key": "limit", "value": "10" },
+            { "key": "sort", "value": "createdAt:desc" },
+            { "key": "tag", "value": "work", "disabled": true },
+            { "key": "q", "value": "sprint", "disabled": true }
+          ]
+        },
+        "description": "List notes with pagination, filtering, search, and sort.\n\nQuery params:\n- page (default 1)\n- limit (default 10, max 100)\n- sort (field:dir — field ∈ title,createdAt,updatedAt; dir ∈ asc,desc)\n- tag (exact match)\n- q (substring search in title and content)"
+      },
+      "response": []
+    },
+    {
+      "name": "/notes/:id (get one)",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/notes/{{noteId}}",
+          "host": ["{{baseUrl}}"],
+          "path": ["notes", "{{noteId}}"]
+        },
+        "description": "Fetch a note by its numeric id. 404 if not found, 400 if id is not a positive integer."
+      },
+      "response": []
+    },
+    {
+      "name": "/notes (create)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "if (pm.response.code === 201) {",
+              "    pm.collectionVariables.set('noteId', pm.response.json().id);",
+              "}"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"title\": \"Sprint planning\",\n    \"content\": \"Discuss capstone delivery and review notes API requirements.\",\n    \"tag\": \"work\"\n}",
+          "options": { "raw": { "language": "json" } }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/notes",
+          "host": ["{{baseUrl}}"],
+          "path": ["notes"]
+        },
+        "description": "Create a note. Required: title (1–100 chars), content (1–5000 chars). Optional: tag (max 30 chars). Unknown fields are rejected (strict schema). On 201, the created id is saved to the noteId collection variable for follow-up requests."
+      },
+      "response": []
+    },
+    {
+      "name": "/notes/:id (update)",
+      "request": {
+        "method": "PUT",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"tag\": \"urgent\"\n}",
+          "options": { "raw": { "language": "json" } }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/notes/{{noteId}}",
+          "host": ["{{baseUrl}}"],
+          "path": ["notes", "{{noteId}}"]
+        },
+        "description": "Partial update — send only the fields you want to change. Empty body is rejected with 400."
+      },
+      "response": []
+    },
+    {
+      "name": "/notes/:id (delete)",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/notes/{{noteId}}",
+          "host": ["{{baseUrl}}"],
+          "path": ["notes", "{{noteId}}"]
+        },
+        "description": "Delete a note by id. Returns 204 No Content on success, 404 if the note doesn't exist."
+      },
+      "response": []
+    }
+  ],
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:3000" },
+    { "key": "noteId", "value": "1" }
+  ]
+}
