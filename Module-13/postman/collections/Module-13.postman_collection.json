@@ -1,0 +1,661 @@
+{
+  "info": {
+    "_postman_id": "ba874171-16fc-4c36-b70f-22aba91359f2",
+    "name": "Module-13",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "51718720",
+    "_collection_link": "https://go.postman.co/collection/51718720-ba874171-16fc-4c36-b70f-22aba91359f2?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "app.ts",
+      "item": [
+        {
+          "name": "/health",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('Returns ok status', function () {",
+                  "    const body = pm.response.json();",
+                  "    pm.expect(body).to.have.property('status', 'ok');",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/health",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "health"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "notes.ts",
+      "item": [
+        {
+          "name": "/notes (list all notes)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('Response is a JSON array', function () {",
+                  "    pm.response.to.be.json;",
+                  "    pm.expect(pm.response.json()).to.be.an('array');",
+                  "});",
+                  "",
+                  "pm.test('Each note has the expected shape', function () {",
+                  "    const notes = pm.response.json();",
+                  "    notes.forEach(function (n) {",
+                  "        pm.expect(n).to.have.property('id').that.is.a('number');",
+                  "        pm.expect(n).to.have.property('title').that.is.a('string');",
+                  "        pm.expect(n).to.have.property('content').that.is.a('string');",
+                  "        pm.expect(n).to.have.property('createdAt');",
+                  "        pm.expect(n).to.have.property('updatedAt');",
+                  "    });",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/notes",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "notes"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "/notes?tag=work (filter by tag)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('Every note has tag = work', function () {",
+                  "    const notes = pm.response.json();",
+                  "    notes.forEach(function (n) {",
+                  "        pm.expect(n.tag).to.eql('work');",
+                  "    });",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/notes?tag=work",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "notes"
+              ],
+              "query": [
+                {
+                  "key": "tag",
+                  "value": "work"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "/notes?search=keyword (search in title and content)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('Response is a JSON array', function () {",
+                  "    pm.expect(pm.response.json()).to.be.an('array');",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/notes?search=meeting",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "notes"
+              ],
+              "query": [
+                {
+                  "key": "search",
+                  "value": "meeting"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "/notes/:id (one note)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 200 or 404', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200, 404]);",
+                  "});",
+                  "",
+                  "if (pm.response.code === 200) {",
+                  "    pm.test('Returns the requested note', function () {",
+                  "        const n = pm.response.json();",
+                  "        pm.expect(n).to.have.property('id', 1);",
+                  "        pm.expect(n).to.have.property('title').that.is.a('string');",
+                  "        pm.expect(n).to.have.property('content').that.is.a('string');",
+                  "        pm.expect(n).to.have.property('createdAt');",
+                  "        pm.expect(n).to.have.property('updatedAt');",
+                  "    });",
+                  "} else {",
+                  "    pm.test('404 returns an error object', function () {",
+                  "        const body = pm.response.json();",
+                  "        pm.expect(body).to.have.property('error');",
+                  "        pm.expect(body.error).to.have.property('status', 404);",
+                  "        pm.expect(body.error).to.have.property('message', 'Note not found');",
+                  "    });",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/notes/1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "notes",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "/notes (create a note)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status is 201', function () {",
+                  "    pm.response.to.have.status(201);",
+                  "});",
+                  "",
+                  "pm.test('Response echoes the submitted fields', function () {",
+                  "    const body = pm.response.json();",
+                  "    pm.expect(body).to.have.property('id').that.is.a('number');",
+                  "    pm.expect(body).to.have.property('title', 'Team standup notes');",
+                  "    pm.expect(body).to.have.property('content', 'Discussed sprint goals and blockers.');",
+                  "    pm.expect(body).to.have.property('tag', 'work');",
+                  "    pm.expect(body).to.have.property('createdAt');",
+                  "    pm.expect(body).to.have.property('updatedAt');",
+                  "});",
+                  "",
+                  "pm.test('Persist the new note id for follow-up requests', function () {",
+                  "    pm.collectionVariables.set('createdNoteId', pm.response.json().id);",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"title\": \"Test Note\",\n    \"content\": \"test test test.\",\n    \"tag\": \"work\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/notes",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "notes"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "/notes (create a note — validation error)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 400', function () {",
+                  "    pm.response.to.have.status(400);",
+                  "});",
+                  "",
+                  "pm.test('Returns a Zod validation error with details', function () {",
+                  "    const body = pm.response.json();",
+                  "    pm.expect(body).to.have.property('error');",
+                  "    pm.expect(body.error).to.have.property('status', 400);",
+                  "    pm.expect(body.error).to.have.property('message', 'Validation failed');",
+                  "    pm.expect(body.error).to.have.property('details').that.is.an('array');",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"title\": \"Missing content\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/notes",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "notes"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "/notes/:id (update a note)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status is 200 or 404', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200, 404]);",
+                  "});",
+                  "",
+                  "if (pm.response.code === 200) {",
+                  "    pm.test('Update applied', function () {",
+                  "        const n = pm.response.json();",
+                  "        pm.expect(n).to.have.property('title', 'Updated standup notes');",
+                  "        pm.expect(n).to.have.property('tag', 'personal');",
+                  "    });",
+                  "} else {",
+                  "    pm.test('404 returns an error object', function () {",
+                  "        const body = pm.response.json();",
+                  "        pm.expect(body).to.have.property('error');",
+                  "        pm.expect(body.error).to.have.property('status', 404);",
+                  "    });",
+                  "}"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"title\": \"Updated title\",\n    \"tag\": \"personal\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/notes/{{createdNoteId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "notes",
+                "{{createdNoteId}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "/notes/:id (delete a note)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 204 or 404', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([204, 404]);",
+                  "});",
+                  "",
+                  "if (pm.response.code === 204) {",
+                  "    pm.test('Empty body on successful delete', function () {",
+                  "        pm.expect(pm.response.text()).to.eql('');",
+                  "    });",
+                  "} else {",
+                  "    pm.test('404 returns an error object', function () {",
+                  "        const body = pm.response.json();",
+                  "        pm.expect(body).to.have.property('error');",
+                  "        pm.expect(body.error).to.have.property('status', 404);",
+                  "    });",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/notes/{{createdNoteId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "notes",
+                "{{createdNoteId}}"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "tags.ts",
+      "item": [
+        {
+          "name": "/tags (list all tags)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('Response is a JSON array', function () {",
+                  "    pm.response.to.be.json;",
+                  "    pm.expect(pm.response.json()).to.be.an('array');",
+                  "});",
+                  "",
+                  "pm.test('Each tag has the expected shape', function () {",
+                  "    const tags = pm.response.json();",
+                  "    tags.forEach(function (t) {",
+                  "        pm.expect(t).to.have.property('id').that.is.a('number');",
+                  "        pm.expect(t).to.have.property('name').that.is.a('string');",
+                  "    });",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/tags",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "tags"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "/tags (create a tag)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 201', function () {",
+                  "    pm.response.to.have.status(201);",
+                  "});",
+                  "",
+                  "pm.test('Response echoes the submitted name', function () {",
+                  "    const body = pm.response.json();",
+                  "    pm.expect(body).to.have.property('id').that.is.a('number');",
+                  "    pm.expect(body).to.have.property('name', 'work');",
+                  "});",
+                  "",
+                  "pm.test('Persist the new tag id for follow-up requests', function () {",
+                  "    pm.collectionVariables.set('createdTagId', pm.response.json().id);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"work\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/tags",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "tags"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "/tags (create a tag — duplicate name)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 409', function () {",
+                  "    pm.response.to.have.status(409);",
+                  "});",
+                  "",
+                  "pm.test('Returns a conflict error', function () {",
+                  "    const body = pm.response.json();",
+                  "    pm.expect(body).to.have.property('error');",
+                  "    pm.expect(body.error).to.have.property('status', 409);",
+                  "    pm.expect(body.error).to.have.property('message', 'Tag name already exists');",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"work\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/tags",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "tags"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "/tags (create a tag — validation error)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 400', function () {",
+                  "    pm.response.to.have.status(400);",
+                  "});",
+                  "",
+                  "pm.test('Returns a Zod validation error with details', function () {",
+                  "    const body = pm.response.json();",
+                  "    pm.expect(body).to.have.property('error');",
+                  "    pm.expect(body.error).to.have.property('status', 400);",
+                  "    pm.expect(body.error).to.have.property('message', 'Validation failed');",
+                  "    pm.expect(body.error).to.have.property('details').that.is.an('array');",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/tags",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "tags"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "exec": [
+          ""
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "exec": [
+          ""
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:3000"
+    },
+    {
+      "key": "createdNoteId",
+      "value": ""
+    },
+    {
+      "key": "createdTagId",
+      "value": ""
+    }
+  ]
+}
